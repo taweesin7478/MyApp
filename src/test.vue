@@ -1,22 +1,28 @@
 <template>
-  <app-navigation></app-navigation>
+  <app-navigator></app-navigator>
 </template>
 
 <script>
-import React from "react";
-import { StackNavigator } from "vue-native-router";
-import HomeScreen from "./screen/url.vue";
+import { createAppContainer, createStackNavigator } from "vue-native-router";
 
-const AppNavigation = StackNavigator(
+import UrlScreen from "./screens/url";
+import MeetScreen from "./screens/meet";
+import JoinScreen from "./screens/join";
+
+const StackNavigator = createStackNavigator(
   {
-    Home: { HomeScreen },
+    Url: UrlScreen,
+    Meet: MeetScreen,
+    Join: JoinScreen,
   },
   {
-    initialRouteName: "Home",
+    initialRouteName: "Url",
   }
 );
 
+const AppNavigator = createAppContainer(StackNavigator);
+
 export default {
-  components: { AppNavigation },
+  components: { AppNavigator },
 };
 </script>
