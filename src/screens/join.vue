@@ -18,35 +18,29 @@ import { Alert } from "react-native";
 export default {
   data() {
     return {
-      users: "98",
+      users: "",
+      url: "",
     };
   },
+  props: {
+    navigation: {
+      type: Object,
+    },
+  },
   created() {
-    this.data();
+    this.manage();
   },
   methods: {
-    async data() {
-      const url = "https://meet.one.th/backend/api/rooms/check/taw-ce5c-0a73";
-      var data = await fetch(url).then((res) => res.json());
-      this.users = data["fullname"];
+    manage() {
+      this.data = this.navigation.state.params.inviteBy;
+      this.users = this.data[0];
+      this.url = this.data[1];
     },
     onPressLearnMore: function () {
-      // Success
       Alert.alert(
         "Success",
-        "สำเร็จแล้ว",
-        [
-          // {
-          //   text: "Ask me later",
-          //   onPress: () => console.log("Ask me later pressed"),
-          // },
-          // {
-          //   text: "Cancel",
-          //   onPress: () => console.log("Cancel Pressed"),
-          //   style: "cancel",
-          // },
-          { text: "OK", onPress: () => console.log("OK Pressed") },
-        ],
+        "URL : " + this.url,
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
         { cancelable: false }
       );
     },

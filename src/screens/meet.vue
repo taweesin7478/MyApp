@@ -9,20 +9,24 @@
     >
     <text-input class="input" v-model="name" placeholder="Enter your name" />
 
-    <button title="join" color="rgb(27, 167, 46)" @press="goToJoinScreen" />
+    <button title="join" color="rgb(27, 167, 46)" :onPress="chack" />
   </view>
 </template>
 
 <script>
+import { Alert } from "react-native";
 export default {
   data() {
     return {
       name: "",
       users: "",
+      data: [],
+      invite: [],
+      uuid: "",
     };
   },
   created() {
-    this.data();
+    this.manage();
   },
   props: {
     navigation: {
@@ -30,13 +34,43 @@ export default {
     },
   },
   methods: {
-    async data() {
-      const url = "https://meet.one.th/backend/api/rooms/check/taw-ce5c-0a73";
-      var data = await fetch(url).then((res) => res.json());
-      this.users = data["fullname"];
+    manage() {
+      this.data = this.navigation.state.params.inviteBy;
+      this.users = this.data[0];
+      this.uuid = this.data[1];
+    },
+    chack() {
+      if (this.name != "") {
+        this.addName();
+      } else {
+        Alert.alert(
+          "Error",
+          "กรุณาป้อนชื่อของคุณ",
+          [{ text: "OK", onPress: () => console.log("OK Pressed") }],
+          { cancelable: false }
+        );
+      }
+    },
+    async addName() {
+      const url = "https://meet.one.th/backend/api/rooms/unauth/joinroom";
+      const requestOptions = {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          roomuid: this.uuid,
+          name: this.name,
+          key: "",
+        }),
+      };
+      const response = await fetch(url, requestOptions);
+      const data = await response.json();
+      this.invite = [this.users, data.url];
+      this.goToJoinScreen();
     },
     goToJoinScreen() {
-      this.navigation.navigate("Join");
+      this.navigation.navigate("Join", {
+        inviteBy: this.invite,
+      });
     },
   },
 };

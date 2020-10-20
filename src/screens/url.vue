@@ -7,34 +7,38 @@
 </template>
 
 <script>
+import React, { useState } from "react";
 import { Alert } from "react-native";
 export default {
   data() {
     return {
       url: "",
       users: "",
+      invite: [],
     };
   },
-
   props: {
     navigation: {
       type: Object,
     },
   },
   methods: {
-    async data(uuid) {
+    async manage(uuid) {
       const url = "https://meet.one.th/backend/api/rooms/check/" + uuid;
       var data = await fetch(url).then((res) => res.json());
       this.users = data;
+      this.invite = [this.users.fullname, uuid];
       this.goToMeetScreen();
     },
     chack() {
       var uuid = this.url.split("=")[1];
-      this.data(uuid);
+      this.manage(uuid);
     },
     goToMeetScreen() {
       if (this.users["status"] == "Success") {
-        this.navigation.navigate("Meet");
+        this.navigation.navigate("Meet", {
+          inviteBy: this.invite,
+        });
       } else {
         Alert.alert(
           "Error",
