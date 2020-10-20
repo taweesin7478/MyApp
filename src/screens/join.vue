@@ -37,12 +37,9 @@ export default {
       this.url = this.data[1];
     },
     onPressLearnMore: function () {
-      Alert.alert(
-        "Success",
-        "URL : " + this.url,
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-        { cancelable: false }
-      );
+      Alert.alert("Success", "URL : " + this.url, [{ text: "OK" }], {
+        cancelable: false,
+      });
     },
   },
 };

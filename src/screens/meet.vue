@@ -43,12 +43,9 @@ export default {
       if (this.name != "") {
         this.addName();
       } else {
-        Alert.alert(
-          "Error",
-          "กรุณาป้อนชื่อของคุณ",
-          [{ text: "OK", onPress: () => console.log("OK Pressed") }],
-          { cancelable: false }
-        );
+        Alert.alert("Error", "กรุณาป้อนชื่อของคุณ", [{ text: "OK" }], {
+          cancelable: false,
+        });
       }
     },
     async addName() {
